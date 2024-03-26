@@ -1,13 +1,13 @@
-const search = document.querySelector('#search');
-const number = document.querySelector('#number');
-const pokemonImage = document.querySelector('#pokemon-image');
-const types = document.querySelector('#types');
-const statNumber = document.querySelectorAll('.stat-number');
-const barInner = document.querySelectorAll('.bar-inner');
-const barOuter = document.querySelectorAll('.bar-outer');
-const statDesc = document.querySelectorAll('.stat-desc');
-const baseStats = document.querySelector('#base-stats');
-const pokedex = document.querySelector('#pokedex')
+const search            = document.querySelector('#search');
+const number            = document.querySelector('#number');
+const pokemonImage      = document.querySelector('#pokemon-image');
+const types             = document.querySelector('#types');
+const statNumber        = document.querySelectorAll('.stat-number');
+const barInner          = document.querySelectorAll('.bar-inner');
+const barOuter          = document.querySelectorAll('.bar-outer');
+const statDesc          = document.querySelectorAll('.stat-desc');
+const baseStats         = document.querySelector('#base-stats');
+const pokedex           = document.querySelector('#pokedex')
 
 const typeColors = {
     "rock":    [182, 158, 49],
@@ -32,7 +32,7 @@ const typeColors = {
 
 const fetchApi = async (pkmnName) => {
     // Joining pokemon names that have more than one word (Mr Mime)
-    pkmnNameApi = pkmnName.split(' ').join('-');
+    pkmnNameApi = (pkmnName.split(' ').join('-')).toLowerCase();
     
     const response = await fetch('https://pokeapi.co/api/v2/pokemon/' + pkmnNameApi);
 
@@ -47,7 +47,7 @@ const fetchApi = async (pkmnName) => {
 
 search.addEventListener('change', async (event) => {
     const pkmnData = await fetchApi(event.target.value);
-    
+
     // Validation when Pokemon does not exist
     if(!pkmnData) {
         alert('Pokémon does not exist!');
@@ -59,8 +59,6 @@ search.addEventListener('change', async (event) => {
     baseStats.style.color = `rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]})`;
     pokedex.style.backgroundColor = `rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]})`;
 
-    //Console for debuggin
-    console.log(pkmnData);
 
     // Sets pokemon number(#) at the top of the page
     number.innerHTML = '#' + pkmnData.id.toString().padStart(3, '0'); //Sets the 0's in front
@@ -69,7 +67,6 @@ search.addEventListener('change', async (event) => {
     pokemonImage.src = pkmnData.sprites.other.home.front_default;
 
     // Updates "Type" bubles
-    //console.log(type)
     types.innerHTML = '';
 
     pkmnData.types.forEach((t) => {
@@ -86,11 +83,10 @@ search.addEventListener('change', async (event) => {
     });
 
     // Update Stats ans Stats bars
-    //console.log(statNumber)
 
     pkmnData.stats.forEach((s, i) => {
-        statNumber[i].innerHTML = s.base_stat.toString().padStart(3, '0');
-        barInner[i].style.width = `${s.base_stat}%`;
+        statNumber[i].innerHTML             = s.base_stat.toString().padStart(3, '0');
+        barInner[i].style.width             = `${s.base_stat}%`;
         barInner[i].style.backgroundColor   = `rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]})`;
         barOuter[i].style.backgroundColor   = `rgba(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]}, 0.3)`;
         statDesc[i].style.color             = `rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]})`;
